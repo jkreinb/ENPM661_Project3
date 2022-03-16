@@ -315,7 +315,7 @@ def a_star_algo(start_node,goal_node,c2c_node):
         current_node = hq.heappop(OpenList)
         ClosedList.append(current_node)
         print("node popped")
-        if current_node[3] == goal_node:
+        if ((current_node[3][0]-goal_node[0])**2+(current_node[3][1]-goal_node[1])**2)**.5 <= 1.5:
             goal_found = True
             print("Goal Found!")
             #goal_route = Backtrack(ClosedList)
