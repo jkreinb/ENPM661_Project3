@@ -135,15 +135,96 @@ while robot_set == False:
         robot_set = True
 
 step_size_set = False
+global STEPSIZE 
 
 # Step size setting loop
 while step_size_set == False:
     print("\nPlease enter desired step size \n")
     print("-------------------------------------------------------\n")
-    step_size = float(input("Enter desired step size, must be between 1-10 \n"))
-    if (step_size < 1) or (step_size > 10):
+    STEPSIZE= float(input("Enter desired step size, must be between 1-10 \n"))
+    if (STEPSIZE < 1) or (STEPSIZE > 10):
         print("\nStep size must be a value between 1-10\n")
         time.sleep(2)
         continue
     else:
         step_size_set = True
+        
+def Move0(CurrentNode):
+    global NODEINDEX
+    NODEINDEX = NODEINDEX + 1
+    NewNode = [0,0,0,0,0]
+    # Parent Node Setting
+    NewNode[0] = CurrentNode[0] + 1
+    # Global Index Setting
+    NewNode[1] = NODEINDEX
+    # Adding Cost (Step Length)
+    NewNode[2] = CurrentNode[1]+STEPSIZE
+    # Adjusting Position
+    NewNode[3] = (CurrentNode[3][0]+(STEPSIZE*np.cos(CurrentNode[4])),CurrentNode[3][1]+(STEPSIZE*np.sin(CurrentNode[4])))    
+    # Adjusting Orientation
+    NewNode[4] = CurrentNode[4]
+    return NewNode
+
+def MoveP30(CurrentNode):
+    global NODEINDEX
+    NODEINDEX = NODEINDEX + 1
+    NewNode = [0,0,0,0,0]
+    # Parent Node Setting
+    NewNode[0] = CurrentNode[0] + 1
+    # Global Index Setting
+    NewNode[1] = NODEINDEX
+    # Adding Cost (Step Length)
+    NewNode[2] = CurrentNode[1]+STEPSIZE
+    # Adjusting Position
+    NewNode[3] = (CurrentNode[3][0]+(STEPSIZE*np.cos(CurrentNode[4]+30)),CurrentNode[3][1]+(STEPSIZE*np.sin(CurrentNode[4]+30)))    
+    # Adjusting Orientation
+    NewNode[4] = CurrentNode[4] + 30
+    return NewNode
+
+def MoveP60(CurrentNode):
+    global NODEINDEX
+    NODEINDEX = NODEINDEX + 1
+    NewNode = [0,0,0,0,0]
+    # Parent Node Setting
+    NewNode[0] = CurrentNode[0] + 1
+    # Global Index Setting
+    NewNode[1] = NODEINDEX
+    # Adding Cost (Step Length)
+    NewNode[2] = CurrentNode[1]+STEPSIZE
+    # Adjusting Position
+    NewNode[3] = (CurrentNode[3][0]+(STEPSIZE*np.cos(CurrentNode[4]+60)),CurrentNode[3][1]+(STEPSIZE*np.sin(CurrentNode[4]+60)))    
+    # Adjusting Orientation
+    NewNode[4] = CurrentNode[4] + 60
+    return NewNode 
+
+def MoveN30(CurrentNode):
+    global NODEINDEX
+    NODEINDEX = NODEINDEX + 1
+    NewNode = [0,0,0,0,0]
+    # Parent Node Setting
+    NewNode[0] = CurrentNode[0] + 1
+    # Global Index Setting
+    NewNode[1] = NODEINDEX
+    # Adding Cost (Step Length)
+    NewNode[2] = CurrentNode[1]+STEPSIZE
+    # Adjusting Position
+    NewNode[3] = (CurrentNode[3][0]+(STEPSIZE*np.cos(CurrentNode[4]-30)),CurrentNode[3][1]+(STEPSIZE*np.sin(CurrentNode[4]-30)))    
+    # Adjusting Orientation
+    NewNode[4] = CurrentNode[4] - 30
+    return NewNode
+
+def MoveN60(CurrentNode):
+    global NODEINDEX
+    NODEINDEX = NODEINDEX + 1
+    NewNode = [0,0,0,0,0]
+    # Parent Node Setting
+    NewNode[0] = CurrentNode[0] + 1
+    # Global Index Setting
+    NewNode[1] = NODEINDEX
+    # Adding Cost (Step Length)
+    NewNode[2] = CurrentNode[1]+STEPSIZE
+    # Adjusting Position
+    NewNode[3] = (CurrentNode[3][0]+(STEPSIZE*np.cos(CurrentNode[4]-60)),CurrentNode[3][1]+(STEPSIZE*np.sin(CurrentNode[4]-60)))    
+    # Adjusting Orientation
+    NewNode[4] = CurrentNode[4] - 60
+    return NewNode
