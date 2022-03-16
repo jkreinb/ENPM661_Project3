@@ -114,3 +114,36 @@ start_node = (start_y,start_x,start_theta)
 
 print(goal_node)
 print(start_node)
+
+robot_set = False
+
+# Robot setting loop
+while robot_set == False:
+    print("\nPlease enter robot clearance and robot radius\n")
+    print("-------------------------------------------------------\n")
+    robot_clearance = int(input("Enter desired clearance, must be an integer\n"))
+    if (robot_clearance < 0):
+        print("\nRobot clearance must be positive value!\n")
+        time.sleep(2)
+        continue
+    robot_radius = int(input("\nEnter Robot radius\n"))
+    if (robot_radius < 0):
+        print("\n Robot can't have negative radius\n")
+        time.sleep(2)
+        continue
+    else:
+        robot_set = True
+
+step_size_set = False
+
+# Step size setting loop
+while step_size_set == False:
+    print("\nPlease enter desired step size \n")
+    print("-------------------------------------------------------\n")
+    step_size = int(input("Enter desired step size, must be an integer between 1-10 \n"))
+    if (step_size < 1) or (step_size > 10):
+        print("\nStep size must be a value between 1-10\n")
+        time.sleep(2)
+        continue
+    else:
+        step_size_set = True
