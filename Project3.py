@@ -79,3 +79,38 @@ while goal_angle_set == False:
         time.sleep(2)
     else:
         goal_angle_set = True
+        
+# Start setting loop
+
+while start_set == False:
+    print("\nPlease enter a starting location on the workspace\n")
+    print("-------------------------------------------------------\n")
+    start_x = int(input("Enter X position of start node, must be an integer between 0-400\n"))
+    start_y = int(input("Enter Y position of start node, must be an integer between 0-250\n"))
+    if start_x < 0 or start_x > 400 or start_y > 250 or start_y < 0: # Checks if start is outside workspace
+        print("\nStarting location is outside of workspace! Please try again\n")
+        time.sleep(2)
+        continue
+    elif c2c_node[start_y][start_x] == np.inf:
+        start_set = True
+    else: # If start is not equal to np.inf it's an obstacle, prompts user again for new start
+        print("\nStarting location is ontop of an obstacle! Please enter new starting location\n")
+        time.sleep(2)
+while start_angle_set == False:
+    start_theta = int(input("Enter orientation of robot at start node, must be in degrees between 0-360, in steps of 30 degrees\n"))
+    if (start_theta > 360) or (start_theta < 0):
+        print("\n Start angle out of range, please normalize within 0-360 degrees \n")
+        time.sleep(2)
+        continue
+    elif (start_theta % 30 != 0):
+        print("\n Start angle must be in steps of 30 degrees! Please try again! \n")
+        time.sleep(2)
+        continue
+    else:
+        start_angle_set = True
+
+goal_node = (goal_y,goal_x,goal_theta)
+start_node = (start_y,start_x,start_theta)
+
+print(goal_node)
+print(start_node)
