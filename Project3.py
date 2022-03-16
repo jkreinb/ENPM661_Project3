@@ -57,8 +57,8 @@ start_angle_set = False
 while goal_set == False:
     print("\nPlease enter a goal location on the workspace\n")
     print("-------------------------------------------------------\n")
-    goal_x = int(input("Enter X position of goal node, must be an integer between 0-400\n"))
-    goal_y = int(input("Enter Y position of goal node, must be an integer between 0-250\n"))
+    goal_x = float(input("Enter X position of goal node, must be an integer between 0-400\n"))
+    goal_y = float(input("Enter Y position of goal node, must be an integer between 0-250\n"))
     if goal_x < 0 or goal_x > 400 or goal_y > 250 or goal_y < 0: # Checks if goal is outside of workspace
         print("\nGoal outside of workspace! Please try again\n")
         time.sleep(2)
@@ -85,8 +85,8 @@ while goal_angle_set == False:
 while start_set == False:
     print("\nPlease enter a starting location on the workspace\n")
     print("-------------------------------------------------------\n")
-    start_x = int(input("Enter X position of start node, must be an integer between 0-400\n"))
-    start_y = int(input("Enter Y position of start node, must be an integer between 0-250\n"))
+    start_x = float(input("Enter X position of start node, must be an integer between 0-400\n"))
+    start_y = float(input("Enter Y position of start node, must be an integer between 0-250\n"))
     if start_x < 0 or start_x > 400 or start_y > 250 or start_y < 0: # Checks if start is outside workspace
         print("\nStarting location is outside of workspace! Please try again\n")
         time.sleep(2)
@@ -121,12 +121,12 @@ robot_set = False
 while robot_set == False:
     print("\nPlease enter robot clearance and robot radius\n")
     print("-------------------------------------------------------\n")
-    robot_clearance = int(input("Enter desired clearance, must be an integer\n"))
+    robot_clearance = float(input("Enter desired clearance, must be an integer\n"))
     if (robot_clearance < 0):
         print("\nRobot clearance must be positive value!\n")
         time.sleep(2)
         continue
-    robot_radius = int(input("\nEnter Robot radius\n"))
+    robot_radius = float(input("\nEnter Robot radius\n"))
     if (robot_radius < 0):
         print("\n Robot can't have negative radius\n")
         time.sleep(2)
@@ -140,7 +140,7 @@ step_size_set = False
 while step_size_set == False:
     print("\nPlease enter desired step size \n")
     print("-------------------------------------------------------\n")
-    step_size = int(input("Enter desired step size, must be an integer between 1-10 \n"))
+    step_size = float(input("Enter desired step size, must be between 1-10 \n"))
     if (step_size < 1) or (step_size > 10):
         print("\nStep size must be a value between 1-10\n")
         time.sleep(2)
