@@ -3,6 +3,7 @@
 #
 
 import time
+from cv2 import waitKey
 import numpy as np
 import heapq as hq
 import cv2 as cv
@@ -179,18 +180,23 @@ def Find_Node(list,node_index):
         if list[i][1]==node_index:
             return list[i]
 
-def Backtrack(ClosedList):
-    goal = ClosedList.pop()
+def Backtrack(current_node,ClosedList):
+    waitKey(0)
+    goal = current_node
     reverse = []
     reverse.append(goal)
     while reverse[-1][2] > 0:
+        print(reverse[-1][2])
+        print(reverse)
         parent = Find_Node(ClosedList,reverse[-1][2])
+        print("found parent is",parent)
         reverse.append(parent)
     route = []
     while reverse:
         UpdateGoal(reverse[-1])
         UpdateImage()
         route.append(reverse.pop())
+    waitKey(0)
     return route
 
 ## Node Index operates via format [Euclidean Cost, Current Node, Parent Node, Position/Rot]
@@ -200,7 +206,7 @@ def Move0(CurrentNode):
     NODEINDEX = NODEINDEX + 1
     NewNode = [0,0,0,0]
     # Parent Node Setting
-    NewNode[2] = CurrentNode[1] + 1
+    NewNode[2] = CurrentNode[1]
     # Global Index Setting
     NewNode[1] = NODEINDEX
     # Generating New Node Pos
@@ -218,7 +224,7 @@ def MoveP30(CurrentNode):
     NODEINDEX = NODEINDEX + 1
     NewNode = [0,0,0,0]
     # Parent Node Setting
-    NewNode[2] = CurrentNode[1] + 1
+    NewNode[2] = CurrentNode[1]
     # Global Index Setting
     NewNode[1] = NODEINDEX
     # Generating New Node Pos
@@ -235,10 +241,11 @@ def MoveP30(CurrentNode):
 
 def MoveP60(CurrentNode):
     global NODEINDEX
+    global STEPSIZE
     NODEINDEX = NODEINDEX + 1
     NewNode = [0,0,0,0]
     # Parent Node Setting
-    NewNode[2] = CurrentNode[1] + 1
+    NewNode[2] = CurrentNode[1]
     # Global Index Setting
     NewNode[1] = NODEINDEX
     # Generating New Node Pos
@@ -259,7 +266,7 @@ def MoveN30(CurrentNode):
     NODEINDEX = NODEINDEX + 1
     NewNode = [0,0,0,0]
     # Parent Node Setting
-    NewNode[2] = CurrentNode[1] + 1
+    NewNode[2] = CurrentNode[1]
     # Global Index Setting
     NewNode[1] = NODEINDEX
     # Generating New Node Pos
@@ -280,7 +287,7 @@ def MoveN60(CurrentNode):
     NODEINDEX = NODEINDEX + 1
     NewNode = [0,0,0,0]
     # Parent Node Setting
-    NewNode[2] = CurrentNode[1] + 1
+    NewNode[2] = CurrentNode[1]
     # Global Index Setting
     NewNode[1] = NODEINDEX
     # Generating New Node Pos
@@ -319,6 +326,10 @@ def Check_List(new_node,list):
     for i in range(len(list)):
         if (np.absolute(list[i][3][0] - new_node[3][0]) <.5) and (np.absolute(list[i][3][1] - new_node[3][1]) <.5) and (list[i][3][2] == new_node[3][2]):
             return True
+
+def Check_Goal(node):
+    if ((node[3][0]-goal_node[0])**2+(node[3][1]-goal_node[1])**2)**.5 <= 1.5 and node[3][2] == goal_node[2]:
+        return True
         
 # Checks if node is not in obstacle space, has been searched, if lower cost found
 # updates the cost respectively
@@ -326,45 +337,56 @@ def Check_Node(new_node,ClosedList,OpenList,c2c_node):
     newnode_y = int(new_node[3][0])
     newnode_x = int(new_node[3][1])
     if c2c_node[newnode_y][newnode_x] != -1 and Check_List(new_node,ClosedList) == None:
+        ClosedList.append(new_node)
         if (Check_List(new_node,OpenList) == False or Check_List(new_node,OpenList) == None) and c2c_node[newnode_y][newnode_x]<=np.inf:
             c2c_node[newnode_y][newnode_x] = new_node[0]
             UpdateSearched(new_node)
             hq.heappush(OpenList,new_node)
-            if (new_node[0] < c2c_node[newnode_y][newnode_x]):
-                c2c_node[newnode_y][newnode_x] = new_node[0]
 
 # Algorithm Loop
 
 goal_found = False
 
 def a_star_algo(start_node,goal_node,c2c_node):
+    global NODEINDEX
     goal_found = False
     #Open/Closed List creation
     OpenList = []
     ClosedList = []
-    hq.heappush(OpenList,((Cost_Calc(start_node[0],start_node[1])),1,0,start_node))  #Pushes starting node into OpenList
+    ClosedList.append(((Cost_Calc(start_node[0],start_node[1])),NODEINDEX,0,start_node))
+    hq.heappush(OpenList,((Cost_Calc(start_node[0],start_node[1])),NODEINDEX,0,start_node))  #Pushes starting node into OpenList
     iterator = 0
     cv.waitKey(0)
     while OpenList and goal_found == False:
         current_node = hq.heappop(OpenList)
-        ClosedList.append(current_node)
         if ((current_node[3][0]-goal_node[0])**2+(current_node[3][1]-goal_node[1])**2)**.5 <= 1.5 and current_node[3][2] == goal_node[2]:
             goal_found = True
             print("Goal Found!")
-            goal_route = Backtrack(ClosedList)
+            print(current_node)
+            goal_route = Backtrack(current_node,ClosedList)
             return goal_route
         else:
             iterator = iterator + 1
             new_node0 = Move0(current_node)
+            print(new_node0)
             Check_Node(new_node0,ClosedList,OpenList,c2c_node)
+            if Check_Goal(new_node0) == True: continue
             new_nodeP30 = MoveP30(current_node)
+            print(new_nodeP30)
             Check_Node(new_nodeP30,ClosedList,OpenList,c2c_node)
+            if Check_Goal(new_nodeP30) == True: continue
             new_nodeP60 = MoveP60(current_node)
+            print(new_nodeP60)
             Check_Node(new_nodeP60,ClosedList,OpenList,c2c_node)
+            if Check_Goal(new_nodeP60) == True: continue
             new_nodeN30 = MoveN30(current_node)
+            print(new_nodeN30)
             Check_Node(new_nodeN30,ClosedList,OpenList,c2c_node)
+            if Check_Goal(new_nodeN30) == True: continue
             new_nodeN60 = MoveN60(current_node)
+            print(new_nodeN60)
             Check_Node(new_nodeN60,ClosedList,OpenList,c2c_node)
+            if Check_Goal(new_nodeN60) == True: continue
             if iterator % 1 == 0: # Only updates image every 100 nodes for speed
                 UpdateImage()
     if goal_found == False:
