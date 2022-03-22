@@ -1,6 +1,4 @@
 ## Project 3 - Implementing A* algorithm
-#  
-#
 
 import time
 from cv2 import waitKey
