@@ -8,9 +8,6 @@ import numpy as np
 import heapq as hq
 import cv2 as cv
 import math
-import matplotlib.pyplot as plt
-
-from zmq import THREAD_NAME_PREFIX
 
 start_time = time.time()
 
